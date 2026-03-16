@@ -3,38 +3,31 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { loginSchema } from "@/lib/schemas/auth";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSent, setIsSent] = useState(false);
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
+    setLoading(true);
+    setError(false);
 
-    const result = loginSchema.safeParse({ email });
-    if (!result.success) {
-      setError(result.error.issues[0].message);
-      return;
-    }
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
 
-    setIsLoading(true);
-
-    // Mock: simulate magic link send (Supabase wordt later gekoppeld)
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsSent(true);
-    setIsLoading(false);
-
-    // In mock mode: direct doorsturen naar dashboard
-    setTimeout(() => {
+    if (res.ok) {
       router.push("/dashboard");
-    }, 1500);
+      router.refresh();
+    } else {
+      setError(true);
+      setLoading(false);
+    }
   }
 
   return (
@@ -55,69 +48,57 @@ export default function LoginPage() {
           <div className="text-center">
             <h1 className="text-2xl font-bold text-looop-navy">Agent Hub</h1>
             <p className="text-sm text-looop-navy/60 mt-1">
-              Log in met je Looop email
+              Voer het wachtwoord in om toegang te krijgen
             </p>
           </div>
         </div>
 
         {/* Login card */}
         <div className="rounded-2xl border border-looop-sand/30 bg-white p-8 shadow-sm">
-          {isSent ? (
-            <div className="text-center space-y-3">
-              <span className="text-4xl">✉️</span>
-              <h2 className="text-lg font-bold text-looop-navy">
-                Check je inbox
-              </h2>
-              <p className="text-sm text-looop-navy/60">
-                We hebben een magic link gestuurd naar{" "}
-                <strong>{email}</strong>
-              </p>
-              <p className="text-xs text-looop-teal">
-                Je wordt automatisch doorgestuurd...
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-bold text-looop-navy mb-1.5"
-                >
-                  Email
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="naam@looop.company"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setError("");
-                  }}
-                  autoFocus
-                />
-                {error && (
-                  <p className="mt-1.5 text-sm text-status-offline">{error}</p>
-                )}
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full"
-                size="lg"
-                disabled={isLoading}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-bold text-looop-navy mb-1.5"
               >
-                {isLoading ? "Bezig..." : "Verstuur magic link"}
-              </Button>
-            </form>
-          )}
+                Wachtwoord
+              </label>
+              <input
+                id="password"
+                type="password"
+                placeholder="Voer wachtwoord in"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError(false);
+                }}
+                className={`w-full rounded-xl border px-4 py-3 text-sm text-looop-navy bg-white outline-none transition-colors ${
+                  error
+                    ? "border-status-offline focus:border-status-offline"
+                    : "border-looop-sand/30 focus:border-looop-blue"
+                }`}
+                autoFocus
+              />
+              {error && (
+                <p className="mt-2 text-xs text-status-offline">
+                  Onjuist wachtwoord. Probeer opnieuw.
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading || !password}
+              className="w-full rounded-xl bg-looop-blue px-4 py-3 text-sm font-bold text-white hover:bg-looop-blue/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Bezig..." : "Inloggen"}
+            </button>
+          </form>
         </div>
 
         {/* Footer */}
         <p className="text-center text-xs text-looop-navy/40">
-          Alleen @looop.company emailadressen hebben toegang.
-          <br />
-          Neem contact op met een admin als je geen uitnodiging hebt ontvangen.
+          Alleen voor intern gebruik — Looop Renewables
         </p>
       </div>
     </div>
