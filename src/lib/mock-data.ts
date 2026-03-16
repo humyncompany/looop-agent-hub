@@ -32,17 +32,6 @@ export const mockAgents: MockAgent[] = [
   },
   {
     id: "2",
-    name: "Inbox Orchestrator",
-    description:
-      "Monitort de inbox en routeert inkomende emails naar de juiste agent op basis van onderwerp-tags en inhoud.",
-    icon: "📬",
-    status: "online",
-    last_heartbeat: new Date(Date.now() - 3 * 60 * 1000).toISOString(),
-    make_scenario_id: "4736454",
-    sandbox_enabled: false,
-  },
-  {
-    id: "3",
     name: "ISCC Adviseur",
     description:
       "Beantwoordt vragen over ISCC-certificering (EU, PLUS, CORSIA) op basis van 60+ officiele ISCC-systeemdocumenten. Vervangt externe consultants (€152,50/uur).",
@@ -53,33 +42,33 @@ export const mockAgents: MockAgent[] = [
     sandbox_enabled: false,
   },
   {
-    id: "4",
+    id: "3",
     name: "Newsletter Agent",
     description:
       "Verzamelt dagelijks biogas, biomassa en feedstock nieuws en genereert een beknopte Market Update voor het Looop-team.",
     icon: "📰",
-    status: "degraded",
-    last_heartbeat: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+    status: "online",
+    last_heartbeat: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
     make_scenario_id: "4847210",
     sandbox_enabled: false,
   },
   {
-    id: "5",
-    name: "Document Parser",
+    id: "4",
+    name: "Market Price Tracker",
     description:
-      "Extraheert productspecificaties uit PDF's, afbeeldingen en gescande documenten voor automatische verwerking.",
-    icon: "🔍",
+      "Monitort realtime marktprijzen voor UCO, tallow, poultry fat en biomassa pellets. Vergelijkt met concurrenten en stuurt alerts bij significante prijswijzigingen.",
+    icon: "📊",
     status: "offline",
     last_heartbeat: null,
     make_scenario_id: null,
     sandbox_enabled: true,
   },
   {
-    id: "6",
-    name: "Price Monitor",
+    id: "5",
+    name: "Supplier Screener",
     description:
-      "Monitort marktprijzen voor UCO, tallow, poultry fat en biomassa. Stuurt alerts bij significante prijswijzigingen.",
-    icon: "📊",
+      "Controleert automatisch of nieuwe leveranciers ISCC-gecertificeerd zijn, verifieert bedrijfsgegevens en compliance-documenten voor due diligence.",
+    icon: "🔎",
     status: "offline",
     last_heartbeat: null,
     make_scenario_id: null,
