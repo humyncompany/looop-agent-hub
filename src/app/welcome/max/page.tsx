@@ -303,99 +303,134 @@ export default function WelcomeDemoPage() {
     },
     {
       id: 4,
-      label: "Impact",
-      title: "Wat levert het op",
+      label: "Kosten",
+      title: "Wat kost het per actie",
       content: (
-        <div className="max-w-2xl mx-auto space-y-8">
-          <h2 className="text-3xl font-bold text-looop-navy text-center">
-            Concrete <span className="text-looop-teal">besparingen</span>
-          </h2>
+        <div className="max-w-3xl mx-auto space-y-8">
+          <div className="text-center space-y-2">
+            <h2 className="text-3xl font-bold text-looop-navy">
+              Kosten per actie vs.{" "}
+              <span className="text-status-offline">huidige kosten</span>
+            </h2>
+            <p className="text-sm text-looop-navy/50">
+              Gebaseerd op medewerkerkosten van ~&euro;35/uur (incl.
+              werkgeverslasten)
+            </p>
+          </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* Per-agent cost table */}
+          <div className="space-y-3">
             {[
               {
-                metric: "45 min → 30 sec",
-                label: "Per offerte",
-                detail: "~98% tijdsbesparing",
+                agent: "Offerte Agent",
+                icon: "📄",
+                costPerAction: "~€0,08",
+                currentCost: "€26,25",
+                currentBasis: "45 min medewerker",
+                saving: "€26,17",
+                volume: "~20 offertes/maand",
+                monthlySaving: "€523",
               },
               {
-                metric: "€152,50/uur",
-                label: "ISCC consultant bespaard",
-                detail: "Onbeperkt vragen stellen",
+                agent: "ISCC Adviseur",
+                icon: "📋",
+                costPerAction: "~€0,05",
+                currentCost: "€152,50",
+                currentBasis: "1 uur extern consultant",
+                saving: "€152,45",
+                volume: "~10 vragen/maand",
+                monthlySaving: "€1.524",
               },
               {
-                metric: "1 uur/dag",
-                label: "Marktnieuws automatisch",
-                detail: "5+ uur per week bespaard",
+                agent: "Newsletter Agent",
+                icon: "📰",
+                costPerAction: "~€0,10",
+                currentCost: "€35,00",
+                currentBasis: "1 uur research/dag",
+                saving: "€34,90",
+                volume: "22 werkdagen/maand",
+                monthlySaving: "€768",
               },
               {
-                metric: "24/7",
-                label: "Altijd beschikbaar",
-                detail: "Geen wachttijden",
+                agent: "Market Price Tracker",
+                icon: "📊",
+                costPerAction: "~€0,15",
+                currentCost: "€70,00",
+                currentBasis: "2 uur monitoring/dag",
+                saving: "€69,85",
+                volume: "22 werkdagen/maand",
+                monthlySaving: "€1.537",
               },
-            ].map((item) => (
+              {
+                agent: "Supplier Screener",
+                icon: "🔎",
+                costPerAction: "~€0,20",
+                currentCost: "€17,50",
+                currentBasis: "30 min per leverancier",
+                saving: "€17,30",
+                volume: "~15 checks/maand",
+                monthlySaving: "€260",
+              },
+            ].map((row) => (
               <div
-                key={item.label}
-                className="rounded-xl bg-white border border-looop-sand/20 p-5 text-center space-y-1"
+                key={row.agent}
+                className="rounded-xl border border-looop-sand/30 bg-white p-4"
               >
-                <p className="text-2xl font-bold text-looop-blue">
-                  {item.metric}
-                </p>
-                <p className="text-sm font-medium text-looop-navy">
-                  {item.label}
-                </p>
-                <p className="text-xs text-looop-navy/50">{item.detail}</p>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{row.icon}</span>
+                    <h3 className="font-bold text-looop-navy">{row.agent}</h3>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm">
+                    <span className="text-status-offline line-through">
+                      {row.currentCost}
+                    </span>
+                    <span className="text-looop-teal font-bold text-lg">
+                      {row.costPerAction}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between text-xs text-looop-navy/50">
+                  <span>
+                    Was: {row.currentBasis} &middot; Nu: AI in seconden
+                  </span>
+                  <span>
+                    {row.volume} ={" "}
+                    <strong className="text-looop-teal">
+                      {row.monthlySaving} bespaard/maand
+                    </strong>
+                  </span>
+                </div>
               </div>
             ))}
           </div>
 
-          <div className="rounded-xl bg-looop-navy p-6 text-white space-y-4">
-            <h3 className="font-bold text-lg">Geschatte maandelijkse kosten</h3>
-            <div className="space-y-2">
-              {[
-                {
-                  item: "Make.com (automation platform)",
-                  cost: "€29/maand",
-                  note: "Core plan — 10.000 operaties",
-                },
-                {
-                  item: "Claude API (AI verwerking)",
-                  cost: "~€20-50/maand",
-                  note: "Afhankelijk van volume",
-                },
-                {
-                  item: "MindStudio (agent logic)",
-                  cost: "€0",
-                  note: "Free tier — voldoende voor huidige agents",
-                },
-                {
-                  item: "Vercel (hosting dashboard)",
-                  cost: "€0",
-                  note: "Free tier — voldoende voor intern gebruik",
-                },
-              ].map((row) => (
-                <div
-                  key={row.item}
-                  className="flex items-center justify-between text-sm"
-                >
-                  <div>
-                    <span className="text-white/90">{row.item}</span>
-                    <span className="text-white/40 ml-2 text-xs">
-                      {row.note}
-                    </span>
-                  </div>
-                  <span className="text-looop-teal font-bold">{row.cost}</span>
-                </div>
-              ))}
-              <div className="border-t border-white/20 pt-2 flex items-center justify-between font-bold">
-                <span>Totaal</span>
-                <span className="text-looop-teal">~€50-80/maand</span>
+          {/* Bottom line */}
+          <div className="rounded-xl bg-looop-navy p-6 text-white">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-sm text-white/60">
+                  Vaste kosten (tools & hosting)
+                </p>
+                <p className="text-2xl font-bold">~&euro;50-80/maand</p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-white/60">
+                  Geschatte besparing per maand
+                </p>
+                <p className="text-2xl font-bold text-looop-teal">
+                  ~&euro;4.600/maand
+                </p>
               </div>
             </div>
-            <p className="text-xs text-white/40">
-              Ter vergelijking: 1 uur ISCC-consultant = €152,50. De agents
-              verdienen zichzelf terug na 1 offerte per maand.
-            </p>
+            <div className="border-t border-white/20 pt-3 flex items-center justify-between">
+              <span className="text-sm text-white/60">
+                Return on Investment
+              </span>
+              <span className="text-xl font-bold text-looop-teal">
+                57x &mdash; terugverdiend in &lt;1 week
+              </span>
+            </div>
           </div>
         </div>
       ),
